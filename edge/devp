@@ -6,6 +6,12 @@ RUN echo "http://mirrors.aliyun.com/alpine/v3.4/main/" > /etc/apk/repositories
 # RUN echo '@community http://nl.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories
 
 RUN apk update && apk upgrade \
+  && apk add cairo cairo-dev cairomm cairomm-dev jpeg jpeg-dev libjpeg-turbo-dev \
+  && apk add pango pango-dev pangomm pangomm-dev giflib giflib-dev libpng g++ \
   && apk add git build-base nodejs-dev nodejs \
+  && npm config set registry https://registry.npm.taobao.org --global \
   && npm install -g npm \
+  && npm install -g node-gyp bower grunt-cli \
+  && npm install -g hiredis@0.4.1 canvas@1.6.0 \
+  && npm cache clear \
   && rm -rf /var/cache/apk/*
