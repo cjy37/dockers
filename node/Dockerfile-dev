@@ -1,4 +1,4 @@
-FROM FROM registry.cn-hangzhou.aliyuncs.com/joinin/base
+FROM registry.cn-hangzhou.aliyuncs.com/joinin/base
 
 RUN apk update && apk upgrade \
   && apk add cairo cairo-dev cairomm cairomm-dev pixman pixman-dev \
