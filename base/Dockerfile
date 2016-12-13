@@ -1,6 +1,6 @@
 FROM alpine:3.4
 
-# 修改为国内镜像源
+# 淇敼涓哄浗鍐呴暅鍍忔簮
 RUN echo "http://mirrors.aliyun.com/alpine/v3.4/main/" > /etc/apk/repositories
 
 RUN apk update && apk upgrade \
