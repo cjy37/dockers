@@ -9,22 +9,10 @@ RUN apk update && apk upgrade && apk add cairo cairo-dev \
   xproto renderproto kbproto xextproto freetype freetype-dev \
   git build-base nodejs-dev nodejs
 
-# Fix bug https://github.com/npm/npm/issues/9863
-#RUN cd $(npm root -g)/npm \
-#  && npm install fs-extra \
-#  && sed -i -e s/graceful-fs/fs-extra/ -e s/fs\.rename/fs.move/ ./lib/utils/rename.js
-
-RUN npm config set registry https://registry.npm.taobao.org --global
-
-#RUN npm install -g npm
-
-RUN npm install -g node-gyp bower grunt-cli
-
-RUN npm cache clear && rm -rf /var/cache/apk/*
-
-RUN chmod 755 /sbin/entrypoint.sh && mkdir -p /root
-
-# ENTRYPOINT ["npm", "install"]
+RUN npm config set registry https://registry.npm.taobao.org --global \
+  && npm install -g node-gyp bower grunt-cli \
+  && npm cache clear && rm -rf /var/cache/apk/* \
+  && chmod 755 /sbin/entrypoint.sh && mkdir -p /root
 
 EXPOSE 80
 
