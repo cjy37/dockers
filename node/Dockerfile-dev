@@ -22,7 +22,7 @@ RUN npm install -g node-gyp bower grunt-cli
 
 RUN npm cache clear && rm -rf /var/cache/apk/*
 
-RUN chmod 755 /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh && mkdir -p /root
 
 # ENTRYPOINT ["npm", "install"]
 
