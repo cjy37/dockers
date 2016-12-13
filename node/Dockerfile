@@ -7,7 +7,7 @@ RUN apk update && apk upgrade \
   && npm uninstall -g npm \
   && rm -rf /var/cache/apk/*
 
-RUN chmod 755 /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh && mkdir -p /root
 
 # ENTRYPOINT ["npm", "install"]
 
