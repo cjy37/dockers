@@ -1,5 +1,7 @@
 FROM registry.cn-hangzhou.aliyuncs.com/joinin/base
 
+COPY entrypoint.sh /sbin/entrypoint.sh
+
 RUN apk update && apk upgrade && apk add cairo cairo-dev \
   cairomm cairomm-dev pixman pixman-dev \
   jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng \
@@ -7,7 +9,23 @@ RUN apk update && apk upgrade && apk add cairo cairo-dev \
   xproto renderproto kbproto xextproto freetype freetype-dev \
   git build-base nodejs-dev nodejs
 
-RUN npm install -g npm
-RUN npm install -g node-gyp bower grunt-cli
+# Fix bug https://github.com/npm/npm/issues/9863
+#RUN cd $(npm root -g)/npm \
+#  && npm install fs-extra \
+#  && sed -i -e s/graceful-fs/fs-extra/ -e s/fs\.rename/fs.move/ ./lib/utils/rename.js
+
 RUN npm config set registry https://registry.npm.taobao.org --global
+  
+RUN npm install -g npm
+
+RUN npm install -g node-gyp bower grunt-cli
+
 RUN npm cache clear && rm -rf /var/cache/apk/*
+
+RUN chmod 755 /sbin/entrypoint.sh
+
+# ENTRYPOINT ["npm", "install"]
+
+EXPOSE 80
+
+CMD ["/sbin/entrypoint.sh"]
