@@ -78,7 +78,7 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node --harmony app.js",
-    "prestart": "node node_modules/grunt-cli/bin/grunt --gruntfile Gruntfile.js prod",
+    "prestart": "grunt prod",
     "test": "npm shrinkwrap && node format_shrinkwrap.js"
   },
   "main": "app.js",

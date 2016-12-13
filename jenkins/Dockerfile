@@ -1,8 +1,11 @@
-FROM alpine:3.4
+FROM jenkins
 
-# 修改为国内镜像源
-RUN echo "http://mirrors.aliyun.com/alpine/v3.4/main/" > /etc/apk/repositories
+USER root
+RUN apt-get update \
+      && apt-get install -y sudo \
+      && rm -rf /var/lib/apt/lists/*
+RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 
-RUN apk update && apk upgrade \
-  && apk add ca-certificates openjdk8-jre-base@community \
-  && rm -rf /var/cache/apk/*
+USER jenkins
+COPY plugins.txt /usr/share/jenkins/plugins.txt
+RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt

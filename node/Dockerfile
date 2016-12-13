@@ -1,9 +1,4 @@
-FROM alpine:3.4
-
-# 修改为国内镜像源
-RUN echo "http://mirrors.aliyun.com/alpine/v3.4/main/" > /etc/apk/repositories
-# RUN echo '@edge http://nl.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories
-# RUN echo '@community http://nl.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories
+FROM registry.cn-hangzhou.aliyuncs.com/joinin/base
 
 RUN apk update && apk upgrade \
   && apk add nodejs \
