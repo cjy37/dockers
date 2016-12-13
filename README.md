@@ -1,2 +1,4 @@
-# docker-node-sailsjs
-运行node sailsjs的镜像，包含了node-gyp sails@0.11.5 bower grunt-cli组件
+# dockers
+## 运行node、jenkins的镜像，
+### node包含了: node-gyp bower grunt-cli 的全局组件
+### jenkins包含了: 操作sudo的权限，可以与docker交互
