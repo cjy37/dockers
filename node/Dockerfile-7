@@ -35,10 +35,8 @@ RUN curl -sSLO https://nodejs.org/dist/${VERSION}/node-${VERSION}.tar.xz && \
   fi
 
 RUN node -v
-RUN npm -v
   
-RUN npm cache clear && npm uninstall -g npm \
-  && chmod 755 /sbin/entrypoint.sh && mkdir -p /root
+RUN chmod 755 /sbin/entrypoint.sh && mkdir -p /root
 
 RUN apk del make gcc linux-headers binutils-gold gnupg ${DEL_PKGS} && \
   rm -rf ${RM_DIRS} /node-${VERSION} /node-${VERSION}* /usr/share/man /tmp/* /var/cache/apk/* \
