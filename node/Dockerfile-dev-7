@@ -11,7 +11,7 @@ RUN apk update && apk upgrade
 
 RUN apk add curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++ 
 
-RUN cairo cairo-dev cairomm cairomm-dev pixman pixman-dev \
+RUN apk add cairo cairo-dev cairomm cairomm-dev pixman pixman-dev \
   jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng \
   pango pango-dev pangomm pangomm-dev giflib giflib-dev  \
   xproto renderproto kbproto xextproto freetype freetype-dev \
