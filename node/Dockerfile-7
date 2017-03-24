@@ -19,7 +19,7 @@ RUN apk update && apk upgrade \
 RUN npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli \
   && npm cache clear
 
-RUN mkdir /tmp && cd /tmp && git clone https://github.com/ncopa/docker-phantomjs-alpine.git \
+RUN cd /tmp && git clone https://github.com/ncopa/docker-phantomjs-alpine.git \
   && cd docker-phantomjs-alpine && cp *.patch /
   
 RUN mkdir -p /usr/src \
