@@ -1,8 +1,8 @@
-FROM mhart/alpine-node:7.7.1
+FROM registry.cn-hangzhou.aliyuncs.com/joinin/docker-phantomjs-alpine:latest
 
 COPY entrypoint.sh /sbin/entrypoint.sh
 
-ENV CONFIG_FLAGS="--fully-static --without-npm" DEL_PKGS="libstdc++" RM_DIRS=/usr/include PHANTOMJS_VERSION=2.1.1
+ENV RM_DIRS=/usr/include
 
 # 修改为国内镜像源
 RUN echo "http://mirrors.aliyun.com/alpine/v3.5/main/" > /etc/apk/repositories
@@ -19,42 +19,10 @@ RUN apk update && apk upgrade \
 RUN npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli \
   && npm cache clear
 
-RUN cd /tmp && git clone https://github.com/ncopa/docker-phantomjs-alpine.git \
-  && cd docker-phantomjs-alpine && cp *.patch /
-  
-RUN mkdir -p /usr/src \
-	&& cd /usr/src \
-	&& git clone git://github.com/ariya/phantomjs.git \
-	&& cd phantomjs \
-	&& git checkout $PHANTOMJS_VERSION \
-	&& git submodule init \
-	&& git submodule update \
-	&& for i in qtbase qtwebkit; do \
-		cd /usr/src/phantomjs/src/qt/$i \
-			&& patch -p1 -i /$i*.patch || break; \
-		done \
-	&& cd /usr/src/phantomjs \
-	&& patch -p1 -i /build.patch \
-	&& python build.py --confirm \
-	&& paxctl -cm bin/phantomjs \
-	&& strip --strip-all bin/phantomjs \
-	&& install -m755 bin/phantomjs /usr/bin/phantomjs \
-	&& runDeps="$( \
-		scanelf --needed --nobanner /usr/bin/phantomjs \
-			| awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-			| sort -u \
-			| xargs -r apk info --installed \
-			| sort -u \
-	)" \
-	&& apk add --virtual .phantomjs-rundeps $runDeps \
-	&& apk del .build-deps \
-	&& rm -r /*.patch /usr/src
-
 RUN chmod 755 /sbin/entrypoint.sh && mkdir -p /root && node -v
 
-RUN rm -rf ${RM_DIRS} /node-${VERSION}* /usr/share/man /tmp/* /var/cache/apk/* \
-    /root/.npm /root/.node-gyp /root/.gnupg /usr/lib/node_modules/npm/man \
-    /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html /usr/lib/node_modules/npm/scripts \
+RUN rm -rf ${RM_DIRS} /usr/share/man /tmp/* /var/cache/apk/* \
+    /root/.gnupg /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html \
 	&& npm config set registry https://registry.npm.taobao.org --global
 		
 EXPOSE 80

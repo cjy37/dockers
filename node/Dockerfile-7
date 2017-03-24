@@ -1,63 +1,12 @@
-FROM mhart/alpine-node:7.7.1
+FROM registry.cn-hangzhou.aliyuncs.com/joinin/node-dev:7
+
+ENV DEL_PKGS="libstdc++"
+
+RUN apk update && apk upgrade && apk del make gcc g++ linux-headers binutils-gold gnupg perl ruby sqlite-dev ${DEL_PKGS}
 
 COPY entrypoint.sh /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh
 
-ENV CONFIG_FLAGS="--fully-static --without-npm" DEL_PKGS="libstdc++" RM_DIRS=/usr/include PHANTOMJS_VERSION=2.1.1
-
-# 修改为国内镜像源
-RUN echo "http://mirrors.aliyun.com/alpine/v3.5/main/" > /etc/apk/repositories
-
-RUN apk update && apk upgrade \
-  && apk add --no-cache --virtual .build-deps \
-  curl g++ cairo cairo-dev cairomm cairomm-dev pixman pixman-dev binutils-gold \
-  jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng gnupg \
-  pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev libstdc++ \
-  xproto renderproto kbproto xextproto freetype freetype-dev fontconfig-dev \
-  bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
-  git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make
-
-RUN npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli \
-  && npm cache clear
-
-RUN cd /tmp && git clone https://github.com/ncopa/docker-phantomjs-alpine.git \
-  && cd docker-phantomjs-alpine && cp *.patch /
-  
-RUN mkdir -p /usr/src \
-	&& cd /usr/src \
-	&& git clone git://github.com/ariya/phantomjs.git \
-	&& cd phantomjs \
-	&& git checkout $PHANTOMJS_VERSION \
-	&& git submodule init \
-	&& git submodule update \
-	&& for i in qtbase qtwebkit; do \
-		cd /usr/src/phantomjs/src/qt/$i \
-			&& patch -p1 -i /$i*.patch || break; \
-		done \
-	&& cd /usr/src/phantomjs \
-	&& patch -p1 -i /build.patch \
-	&& python build.py --confirm \
-	&& paxctl -cm bin/phantomjs \
-	&& strip --strip-all bin/phantomjs \
-	&& install -m755 bin/phantomjs /usr/bin/phantomjs \
-	&& runDeps="$( \
-		scanelf --needed --nobanner /usr/bin/phantomjs \
-			| awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-			| sort -u \
-			| xargs -r apk info --installed \
-			| sort -u \
-	)" \
-	&& apk add --virtual .phantomjs-rundeps $runDeps \
-	&& apk del .build-deps \
-	&& rm -r /*.patch /usr/src
-
-RUN chmod 755 /sbin/entrypoint.sh && mkdir -p /root && node -v
-
-RUN apk del curl make gcc g++ python linux-headers binutils-gold gnupg perl ruby sqlite-dev ${DEL_PKGS} && \
-	rm -rf ${RM_DIRS} /node-${VERSION}* /usr/share/man /tmp/* /var/cache/apk/* \
-    /root/.npm /root/.node-gyp /root/.gnupg /usr/lib/node_modules/npm/man \
-    /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html /usr/lib/node_modules/npm/scripts \
-	&& npm config set registry https://registry.npm.taobao.org --global
-		
 EXPOSE 80
 
 CMD ["/sbin/entrypoint.sh"]
