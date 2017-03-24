@@ -14,9 +14,9 @@ RUN apk update && apk upgrade \
   pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev libstdc++ \
   xproto renderproto kbproto xextproto freetype freetype-dev fontconfig-dev \
   bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
-  git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make \
-  && npm config set registry https://registry.npm.taobao.org --global \
-  && npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli \
+  git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make
+
+RUN npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli \
   && npm cache clear
 
 RUN mkdir /tmp && cd /tmp && git clone https://github.com/ncopa/docker-phantomjs-alpine.git \
@@ -54,7 +54,8 @@ RUN chmod 755 /sbin/entrypoint.sh && mkdir -p /root && node -v
 
 RUN rm -rf ${RM_DIRS} /node-${VERSION}* /usr/share/man /tmp/* /var/cache/apk/* \
     /root/.npm /root/.node-gyp /root/.gnupg /usr/lib/node_modules/npm/man \
-    /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html /usr/lib/node_modules/npm/scripts
+    /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html /usr/lib/node_modules/npm/scripts \
+	&& npm config set registry https://registry.npm.taobao.org --global
 		
 EXPOSE 80
 
