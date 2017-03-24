@@ -2,14 +2,19 @@ FROM mhart/alpine-node:base-7.7.1
 
 COPY entrypoint.sh /sbin/entrypoint.sh
 
+ENV CONFIG_FLAGS="--fully-static --without-npm" DEL_PKGS="libstdc++" RM_DIRS=/usr/include PHANTOMJS_VERSION=2.1.1
+
 # 修改为国内镜像源
 RUN echo "http://mirrors.aliyun.com/alpine/v3.5/main/" > /etc/apk/repositories
 
-RUN apk update && apk upgrade && apk add cairo cairo-dev cairomm cairomm-dev pixman pixman-dev \
-  jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng \
-  pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev \
+RUN apk update && apk upgrade \
+  && apk add --no-cache --virtual .build-deps \
+  curl g++ cairo cairo-dev cairomm cairomm-dev pixman pixman-dev binutils-gold \
+  jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng gnupg \
+  pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev libstdc++ \
   xproto renderproto kbproto xextproto freetype freetype-dev fontconfig-dev \
   bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
+  git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make \
   && npm config set registry https://registry.npm.taobao.org --global \
   && npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli \
   && npm cache clear
@@ -17,8 +22,6 @@ RUN apk update && apk upgrade && apk add cairo cairo-dev cairomm cairomm-dev pix
 RUN mkdir /tmp && cd /tmp && git clone https://github.com/ncopa/docker-phantomjs-alpine.git \
   && cd docker-phantomjs-alpine && cp *.patch /
   
-ENV PHANTOMJS_VERSION 2.1.1
-
 RUN mkdir -p /usr/src \
 	&& cd /usr/src \
 	&& git clone git://github.com/ariya/phantomjs.git \
@@ -46,10 +49,14 @@ RUN mkdir -p /usr/src \
 	&& apk add --virtual .phantomjs-rundeps $runDeps \
 	&& apk del .build-deps \
 	&& rm -r /*.patch /usr/src
-	
-RUN rm -rf /var/cache/apk/* \
-  && chmod 755 /sbin/entrypoint.sh && mkdir -p /root && node -v
 
+RUN chmod 755 /sbin/entrypoint.sh && mkdir -p /root && node -v
+
+RUN apk del curl make gcc g++ python linux-headers binutils-gold gnupg perl ruby sqlite-dev ${DEL_PKGS} && \
+	rm -rf ${RM_DIRS} /node-${VERSION}* /usr/share/man /tmp/* /var/cache/apk/* \
+    /root/.npm /root/.node-gyp /root/.gnupg /usr/lib/node_modules/npm/man \
+    /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html /usr/lib/node_modules/npm/scripts
+		
 EXPOSE 80
 
 CMD ["/sbin/entrypoint.sh"]
