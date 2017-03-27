@@ -17,14 +17,12 @@ RUN apk update && apk upgrade \
   git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make
 
 RUN npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli \
-  && npm cache clear
+	&& chmod 755 /sbin/entrypoint.sh && mkdir -p /root && node -v
 
-RUN chmod 755 /sbin/entrypoint.sh && mkdir -p /root && node -v
-
-RUN rm -rf ${RM_DIRS} /usr/share/man /tmp/* /var/cache/apk/* \
+RUN npm cache clear && rm -rf ${RM_DIRS} /usr/share/man /tmp/* /var/cache/apk/* \
     /root/.gnupg /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html \
 	&& npm config set registry https://registry.npm.taobao.org --global
-		
+
 EXPOSE 80
 
 CMD ["/sbin/entrypoint.sh"]
