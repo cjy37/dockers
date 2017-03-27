@@ -16,8 +16,11 @@ RUN apk update && apk upgrade \
   bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
   git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make
 
-RUN cd /tmp && tar -xjvf phantomjs-2.1.1-linux-x86_64.tar.bz2 && chmod 755 /tmp/phantomjs-2.1.1-linux-x86_64/bin/phantomjs \
-	&& /tmp/phantomjs-2.1.1-linux-x86_64/bin/phantomjs -v && /tmp/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /tmp/hello.js
+RUN cd /tmp && tar -xjvf phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+	&& cd /tmp/phantomjs-2.1.1-linux-x86_64/bin/ \
+	&& chmod 755 phantomjs \
+	&& ./phantomjs -v \
+	&& ./phantomjs /tmp/hello.js
 
 COPY /tmp/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin/phantomjs
 
