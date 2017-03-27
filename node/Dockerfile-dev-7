@@ -2,8 +2,6 @@ FROM registry.cn-hangzhou.aliyuncs.com/joinin/docker-phantomjs-alpine:latest
 
 COPY entrypoint.sh /sbin/entrypoint.sh
 
-ENV RM_DIRS=/usr/include
-
 # 修改为国内镜像源
 # RUN echo "http://mirrors.aliyun.com/alpine/v3.5/main/" > /etc/apk/repositories
 
@@ -16,12 +14,13 @@ RUN apk update && apk upgrade \
   bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
   git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make
 
-RUN npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli \
-	&& chmod 755 /sbin/entrypoint.sh && mkdir -p /root && node -v
+RUN mkdir -p /root \
+	&& npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli \
+	&& node -v && chmod 755 /sbin/entrypoint.sh
 
-RUN npm cache clear && rm -rf ${RM_DIRS} /usr/share/man /tmp/* /var/cache/apk/* \
+RUN npm cache clear && rm -rf /tmp/* /var/cache/apk/* \
     /root/.gnupg /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html \
-	&& npm config set registry https://registry.npm.taobao.org --global
+	&& apk del .build-deps && npm config set registry https://registry.npm.taobao.org --global
 
 EXPOSE 80
 
