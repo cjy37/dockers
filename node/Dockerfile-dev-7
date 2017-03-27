@@ -1,6 +1,8 @@
-FROM registry.cn-hangzhou.aliyuncs.com/joinin/docker-phantomjs-alpine:latest
+FROM mhart/alpine-node:7.7.1
 
 COPY entrypoint.sh /sbin/entrypoint.sh
+COPY hello.js /tmp/hello.js
+COPY phantomjs-2.1.1-linux-x86_64.tar.bz2 /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2
 
 # 修改为国内镜像源
 # RUN echo "http://mirrors.aliyun.com/alpine/v3.5/main/" > /etc/apk/repositories
@@ -14,6 +16,10 @@ RUN apk update && apk upgrade \
   bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
   git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make
 
+RUN cd /tmp && tar -xjvf phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+	&& cp /tmp/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin/phantomjs
+	&& phantomjs -v && phantomjs /tmp/hello.js
+  
 RUN mkdir -p /root \
 	&& npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli \
 	&& node -v && chmod 755 /sbin/entrypoint.sh
