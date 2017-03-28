@@ -54,7 +54,7 @@ RUN apk add --no-cache \
 		libicu-dev \
 		libfontconfig1-dev \
 		libjpeg-dev \
-		libfreetype6\
+		libfreetype6 \
 	&& mkdir -p /root \
 	&& node -v
 
