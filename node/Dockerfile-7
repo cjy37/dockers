@@ -1,19 +1,20 @@
-FROM registry.cn-hangzhou.aliyuncs.com/joinin/node-dev:7
+FROM registry.cn-hangzhou.aliyuncs.com/joinin/docker-phantomjs-alpine:latest
 
 RUN apk update \
 	&& apk upgrade \
-	&& apk del make gcc g++ binutils-gold gnupg perl ruby sqlite-dev \
-	   g++ cairo cairo-dev cairomm cairomm-dev pixman pixman-dev binutils-gold \
-	   jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng gnupg \
-	   pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev \
-	   xproto renderproto kbproto xextproto freetype freetype-dev fontconfig-dev \
-	   bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
-	   git build-base nodejs-dev \
-	&& npm remove -g node-gyp bower grunt-cli \
+	&& apk add --no-cache --virtual .build-deps \
+	   curl g++ git build-base nodejs-dev gcc perl python ruby linux-headers make \
 	&& rm /usr/local/bin/phantomjs /usr/bin/phantomjs \
 	&& rm -rf /usr/share/fonts \
-	&& npm cache clear \
-	&& rm -rf /tmp/* /var/cache/apk/* \
+	&& mkdir -p /root \
+	&& node -v \
+	&& npm install -g gulp-cli cordova-hot-code-push-cli
+
+RUN npm cache clear \
+	&& apk del .build-deps \
+	&& rm -rf /tmp/* /var/cache/apk/* /root/.gnupg /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html \
+	&& npm config set registry https://registry.npm.taobao.org --global \
+	&& echo "http://mirrors.aliyun.com/alpine/v3.5/main/" > /etc/apk/repositories \
 	&& mkdir -p /root
 
 COPY entrypoint.sh /sbin/entrypoint.sh
@@ -23,3 +24,5 @@ RUN chmod 755 /sbin/entrypoint.sh
 EXPOSE 80
 
 CMD ["/sbin/entrypoint.sh"]
+
+

@@ -7,7 +7,7 @@ COPY entrypoint.sh /sbin/entrypoint.sh
 
 RUN apk update \
 	&& apk upgrade \
-	&& apk add --no-cache \
+	&& apk add --no-cache --virtual .build-deps \
 	   curl g++ cairo cairo-dev cairomm cairomm-dev pixman pixman-dev binutils-gold \
 	   jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng gnupg \
 	   pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev libstdc++ \
