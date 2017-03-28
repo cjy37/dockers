@@ -1,2 +1,2 @@
-#!/bin/bash
+#!/bin/sh
 grunt prod && node --harmony app.js
