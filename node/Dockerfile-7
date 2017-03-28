@@ -5,6 +5,17 @@ ENV DEL_PKGS="libstdc++"
 RUN apk update \
 	&& apk upgrade \
 	&& apk del make gcc g++ linux-headers binutils-gold gnupg perl ruby sqlite-dev ${DEL_PKGS} \
+	   g++ cairo cairo-dev cairomm cairomm-dev pixman pixman-dev binutils-gold \
+	   jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng gnupg \
+	   pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev libstdc++ \
+	   xproto renderproto kbproto xextproto freetype freetype-dev fontconfig-dev \
+	   bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
+	   git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make \
+	&& npm remove -g node-gyp bower grunt-cli \
+	&& rm /usr/local/bin/phantomjs /usr/bin/phantomjs \
+	&& rm -rf /usr/share/fonts \
+	&& npm cache clear \
+	&& rm -rf /tmp/* /var/cache/apk/* \
 	&& mkdir -p /root
 
 COPY entrypoint.sh /sbin/entrypoint.sh
