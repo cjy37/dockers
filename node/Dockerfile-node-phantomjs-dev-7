@@ -26,7 +26,6 @@ RUN apk add --no-cache \
 		libcom_err \
 		musl-dev \
 		libgpg-error \
-		nss-static \
 		nss-dev \
 		libgcc \
 		zlib \
@@ -51,10 +50,6 @@ RUN apk add --no-cache \
 		gnutls \
 		gnutls-dev \
 		icu-libs \
-		libicu-dev \
-		libfontconfig1-dev \
-		libjpeg-dev \
-		libfreetype6 \
 	&& mkdir -p /root \
 	&& node -v
 
