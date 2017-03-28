@@ -1,13 +1,11 @@
 FROM registry.cn-hangzhou.aliyuncs.com/joinin/node-dev:7
 
-ENV DEL_PKGS="libstdc++"
-
 RUN apk update \
 	&& apk upgrade \
-	&& apk del make gcc g++ linux-headers binutils-gold gnupg perl ruby sqlite-dev ${DEL_PKGS} \
+	&& apk del make gcc g++ linux-headers binutils-gold gnupg perl ruby sqlite-dev \
 	   g++ cairo cairo-dev cairomm cairomm-dev pixman pixman-dev binutils-gold \
 	   jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng gnupg \
-	   pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev libstdc++ \
+	   pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev \
 	   xproto renderproto kbproto xextproto freetype freetype-dev fontconfig-dev \
 	   bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
 	   git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make \
