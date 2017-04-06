@@ -70,5 +70,5 @@ RUN npm cache clear \
 	&& mkdir -p /root
 	
 EXPOSE 80
-
+WORKDIR /wwwroot/htdocs/www
 CMD ["/sbin/entrypoint.sh"]
