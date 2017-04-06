@@ -9,5 +9,5 @@ RUN apk update && apk upgrade \
   && chmod 755 /sbin/entrypoint.sh && mkdir -p /root
 
 EXPOSE 80
-
+WORKDIR /wwwroot/htdocs/www
 CMD ["/sbin/entrypoint.sh"]
