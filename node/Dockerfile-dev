@@ -15,5 +15,5 @@ RUN npm config set registry https://registry.npm.taobao.org --global \
   && chmod 755 /sbin/entrypoint.sh && mkdir -p /root
 
 EXPOSE 80
-
+WORKDIR /wwwroot/htdocs/www
 CMD ["/sbin/entrypoint.sh"]
