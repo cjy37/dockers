@@ -60,7 +60,7 @@ RUN mkdir /tmp/phantomjs && cd /tmp/phantomjs \
 RUN /usr/bin/phantomjs -v \
 	&& /usr/bin/phantomjs /tmp/hello.js
 	
-RUN npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli \
+RUN npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli pm2 \
 	&& chmod 755 /sbin/entrypoint.sh
 
 RUN npm cache clear \

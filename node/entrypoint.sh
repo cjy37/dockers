@@ -1,2 +1,2 @@
 #!/bin/sh
-grunt prod && node --harmony app.js
+pm2 start app.js -i max -x -- --prod
