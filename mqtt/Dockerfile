@@ -21,7 +21,8 @@ RUN     mkdir build
 WORKDIR /tmp/libwebsockets-2.4.0/build
 RUN     cmake .. -DOPENSSL_ROOT_DIR=/usr/bin/openssl
 RUN     make && make install
-RUN     ln -s /usr/local/lib/libwebsockets.so.4.0.0 /usr/lib/libwebsockets.so.12
+RUN     ln -s /usr/local/lib/libwebsockets.so /usr/lib/libwebsockets.so
+RUN     ln -s /usr/local/lib/libwebsockets.so.12 /usr/lib/libwebsockets.so.12
 
 RUN     mkdir -p /usr/local/src
 WORKDIR          /usr/local/src
@@ -29,7 +30,7 @@ RUN     wget http://mosquitto.org/files/source/mosquitto-$MOSQUITTOVERSION.tar.g
 RUN     tar xvzf ./mosquitto-$MOSQUITTOVERSION.tar.gz
 COPY    config.mk /usr/local/src/mosquitto-$MOSQUITTOVERSION/config.mk
 WORKDIR /usr/local/src/mosquitto-$MOSQUITTOVERSION
-#RUN     sed 's/WITH_WEBSOCKETS:=no/WITH_WEBSOCKETS:=yes/' config.mk  
+#RUN     sed 's/WITH_WEBSOCKETS\:\=no/WITH_WEBSOCKETS\:\=yes/' config.mk  
 RUN     make && make install
 
 RUN     adduser --system --disabled-password --disabled-login mosquitto
