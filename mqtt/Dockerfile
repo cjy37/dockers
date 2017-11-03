@@ -41,4 +41,4 @@ COPY mosquitto.conf /etc/mosquitto/mosquitto.conf
 EXPOSE 1883
 EXPOSE 1886
 
-CMD ["/usr/local/sbin/mosquitto"]
+ENTRYPOINT ["mosquitto","-c","/etc/mosquitto/mosquitto.conf"]
