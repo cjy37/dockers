@@ -27,8 +27,9 @@ RUN     mkdir -p /usr/local/src
 WORKDIR          /usr/local/src
 RUN     wget http://mosquitto.org/files/source/mosquitto-$MOSQUITTOVERSION.tar.gz
 RUN     tar xvzf ./mosquitto-$MOSQUITTOVERSION.tar.gz
+COPY    config.mk /usr/local/src/mosquitto-$MOSQUITTOVERSION/config.mk
 WORKDIR /usr/local/src/mosquitto-$MOSQUITTOVERSION
-RUN     sed 's/WITH_WEBSOCKETS:=no/WITH_WEBSOCKETS:=yes/' config.mk  
+#RUN     sed 's/WITH_WEBSOCKETS:=no/WITH_WEBSOCKETS:=yes/' config.mk  
 RUN     make && make install
 
 RUN     adduser --system --disabled-password --disabled-login mosquitto
