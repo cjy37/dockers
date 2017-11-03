@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update     && \
     apt-get upgrade -y && \
     apt-get install -y wget build-essential libwrap0-dev libssl-dev python-distutils-extra \
-                       libc-ares-dev uuid-dev openssl-dev cmake
+                       libc-ares-dev uuid-dev libssl-dev cmake
 
 WORKDIR /tmp                      
 RUN     wget https://github.com/warmcat/libwebsockets/archive/v1.3-chrome37-firefox30.tar.gz  
