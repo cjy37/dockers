@@ -12,15 +12,16 @@ RUN apt-get update     && \
     apt-get install -y wget build-essential libwrap0-dev libssl-dev python-distutils-extra \
                        libc-ares-dev uuid-dev libssl-dev cmake
 
-WORKDIR /tmp                      
-RUN     wget https://github.com/warmcat/libwebsockets/archive/v1.3-chrome37-firefox30.tar.gz  
-RUN     tar xvzf v1.3-chrome37-firefox30.tar.gz  
-WORKDIR /tmp/v1.3-chrome37-firefox30  
-RUN     mkdir build  
-WORKDIR /tmp/v1.3-chrome37-firefox30/build  
-RUN     cmake .. -DOPENSSL_ROOT_DIR=/usr/bin/openssl  
+WORKDIR /tmp
+#RUN     wget https://github.com/warmcat/libwebsockets/archive/v1.3-chrome37-firefox30.tar.gz
+RUN     wget https://github.com/warmcat/libwebsockets/archive/v2.4.0.tar.gz
+RUN     tar xvzf v2.4.0.tar.gz
+WORKDIR /tmp/libwebsockets-2.4.0
+RUN     mkdir build
+WORKDIR /tmp/libwebsockets-2.4.0/build
+RUN     cmake .. -DOPENSSL_ROOT_DIR=/usr/bin/openssl
 RUN     make && make install
-RUN     ln -s /usr/local/lib/libwebsockets.so.4.0.0 /usr/lib/libwebsockets.so.4.0.0  
+RUN     ln -s /usr/local/lib/libwebsockets.so.4.0.0 /usr/lib/libwebsockets.so.4.0.0
 
 RUN     mkdir -p /usr/local/src
 WORKDIR          /usr/local/src
