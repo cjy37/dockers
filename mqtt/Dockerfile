@@ -21,7 +21,7 @@ RUN     mkdir build
 WORKDIR /tmp/libwebsockets-2.4.0/build
 RUN     cmake .. -DOPENSSL_ROOT_DIR=/usr/bin/openssl
 RUN     make && make install
-RUN     ln -s /usr/local/lib/libwebsockets.so.4.0.0 /usr/lib/libwebsockets.so.4.0.0
+RUN     ln -s /usr/local/lib/libwebsockets.so.4.0.0 /usr/lib/libwebsockets.so.12
 
 RUN     mkdir -p /usr/local/src
 WORKDIR          /usr/local/src
