@@ -32,6 +32,8 @@ COPY    config.mk /usr/local/src/mosquitto-$MOSQUITTOVERSION/config.mk
 WORKDIR /usr/local/src/mosquitto-$MOSQUITTOVERSION
 #RUN     sed 's/WITH_WEBSOCKETS\:\=no/WITH_WEBSOCKETS\:\=yes/' config.mk  
 RUN     make && make install
+RUN     echo "/usr/lib" >> /etc/ld.so.conf.d/libc.conf
+RUN     ldconfig
 RUN     ln -s /usr/local/lib/libmosquitto.so.1 /usr/lib/libmosquitto.so.1
 RUN     adduser --system --disabled-password --disabled-login mosquitto
 USER    mosquitto
