@@ -1,0 +1,32 @@
+FROM registry.cn-hangzhou.aliyuncs.com/joinin/docker-phantomjs-alpine:latest
+
+COPY entrypoint.sh /sbin/entrypoint.sh
+
+# 修改为国内镜像源
+# RUN echo "http://mirrors.aliyun.com/alpine/v3.5/main/" > /etc/apk/repositories
+
+RUN apk update \
+	&& apk upgrade \
+	&& apk add --no-cache --virtual .build-deps \
+	   curl g++ cairo cairo-dev cairomm cairomm-dev pixman pixman-dev binutils-gold \
+	   jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng gnupg \
+	   imagemagick-dev graphicsmagick-dev imagemagick graphicsmagick \
+	   pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev libstdc++ \
+	   xproto renderproto kbproto xextproto freetype freetype-dev fontconfig-dev \
+	   bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
+	   git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make \
+	&& mkdir -p /root \
+	&& node -v
+
+RUN npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli pm2 \
+	&& chmod 755 /sbin/entrypoint.sh
+
+RUN npm cache clear \
+	&& rm -rf /tmp/* /var/cache/apk/* /root/.gnupg /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html \
+	&& npm config set registry https://registry.npm.taobao.org --global \
+	&& echo "http://mirrors.aliyun.com/alpine/v3.5/main/" > /etc/apk/repositories \
+	&& mkdir -p /root
+	
+EXPOSE 80
+WORKDIR /wwwroot/htdocs/www
+CMD ["/sbin/entrypoint.sh"]
