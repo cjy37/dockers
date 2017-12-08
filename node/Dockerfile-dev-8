@@ -18,7 +18,7 @@ RUN apk update \
 	&& mkdir -p /root \
 	&& node -v
 
-RUN npm install -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli pm2 \
+RUN npm install --unsafe-perm -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli pm2 \
 	&& chmod 755 /sbin/entrypoint.sh
 
 RUN npm cache clear \
