@@ -9,7 +9,7 @@ RUN apk update \
 	&& apk upgrade \
 	&& apk add --no-cache --virtual .build-deps \
 	   curl g++ cairo cairo-dev cairomm cairomm-dev pixman pixman-dev binutils-gold \
-	   jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng gnupg \
+	   jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng gnupg krb5-dev \
 	   imagemagick-dev graphicsmagick-dev imagemagick graphicsmagick \
 	   pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev libstdc++ \
 	   xproto renderproto kbproto xextproto freetype freetype-dev fontconfig-dev \

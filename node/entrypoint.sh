@@ -1,2 +1,2 @@
 #!/bin/sh
-pm2 start app.js -i max -x -- --prod
+pm2-runtime app.js -i max
