@@ -4,21 +4,23 @@ ENV LANG=C.UTF-8
 
 RUN apk update \
 	&& apk upgrade \
-	&& apk add --no-cache --virtual .build-deps1 imagemagick imagemagick-dev graphicsmagick graphicsmagick-dev libc6-compat
+	&& apk add --no-cache imagemagick imagemagick-dev graphicsmagick graphicsmagick-dev curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++
+
+RUN apk update \
+	&& apk upgrade \
+	&& apk add --no-cache curl ca-certificates openssl \
+	&& apk add --update ca-certificates openssl \
+	&& update-ca-certificates 2>/dev/null || true
 
 # 修改为国内镜像源
-# RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.7/main/" > /etc/apk/repositories
-RUN echo "http://mirrors.aliyun.com/alpine/v3.7/main/" > /etc/apk/repositories
+# RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.5/main/" > /etc/apk/repositories
+# RUN echo 'https://mirrors.ustc.edu.cn/alpine/v3.7/main' > /etc/apk/repositories \
+#  && echo 'https://mirrors.ustc.edu.cn/alpine/v3.7/community' > /etc/apk/repositories
 
 # ENV VERSION=v4.9.1 NPM_VERSION=2
 # ENV VERSION=v6.14.2 NPM_VERSION=3
 ENV VERSION=v8.11.3 NPM_VERSION=5 YARN_VERSION=latest
 # ENV VERSION=v10.4.1 NPM_VERSION=6 YARN_VERSION=latest
-
-# For base builds
-# ENV CONFIG_FLAGS="--fully-static --without-npm" DEL_PKGS="libstdc++" RM_DIRS=/usr/include
-
-RUN apk add --no-cache --virtual .build-deps2 curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++
 
 RUN for server in ipv4.pool.sks-keyservers.net keyserver.pgp.com ha.pool.sks-keyservers.net; do \
         gpg --keyserver $server --recv-keys \
@@ -69,14 +71,7 @@ COPY fonts.tar.bz2 /tmp/fonts.tar.bz2
 RUN mkdir -p /usr/share/fonts \
 	&& tar -xjvf /tmp/fonts.tar.bz2 -C /usr/share/fonts
 
-RUN apk update \
-	&& apk upgrade \
-	&& apk add --no-cache --virtual .build-deps3 curl ca-certificates openssl \
-	&& apk add --update ca-certificates openssl \
-	&& update-ca-certificates 2>/dev/null || true
-
-RUN apk add --no-cache --virtual .build-deps4 \
-		cairo cairo-dev cairomm cairomm-dev pixman pixman-dev \
+RUN apk add --no-cache cairo cairo-dev cairomm cairomm-dev pixman pixman-dev \
 		jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng libpng-dev \
 		pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev \
 		xproto renderproto kbproto xextproto freetype freetype-dev fontconfig-dev \
@@ -108,8 +103,7 @@ RUN npm config set registry https://registry.npm.taobao.org --global
 
 RUN npm install --unsafe-perm -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli pm2
 
-RUN apk del .build-deps1 .build-deps2 .build-deps3 .build-deps4 \
-    && npm cache clear --force \
+RUN npm cache clear --force \
     && chmod 755 /sbin/entrypoint.sh \
     && rm -rf /tmp/* /var/cache/apk/* /root/.gnupg /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html
 
