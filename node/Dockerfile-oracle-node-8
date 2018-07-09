@@ -5,50 +5,76 @@ ENV VERSION=v8.11.3 NPM_VERSION=5 YARN_VERSION=latest
 # ENV VERSION=v10.4.1 NPM_VERSION=6 YARN_VERSION=latest
 
 # 修改为国内镜像源
-# RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.5/main/" > /etc/apk/repositories
 RUN echo 'https://mirrors.ustc.edu.cn/alpine/v3.7/main' > /etc/apk/repositories \
  && echo 'https://mirrors.ustc.edu.cn/alpine/v3.7/community' >> /etc/apk/repositories
 
+# 修改了镜像源，需要更新证书
 RUN apk update \
 	&& apk upgrade \
 	&& apk add --no-cache curl ca-certificates openssl \
 	&& apk add --update ca-certificates openssl \
 	&& update-ca-certificates
 
-RUN apk add --no-cache imagemagick imagemagick-dev graphicsmagick graphicsmagick-dev \
-		curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++ libnsl libnsl-dev \
-		nodejs nodejs-npm nodejs-dev yarn cairo cairo-dev cairomm cairomm-dev pixman pixman-dev \
-		jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng libpng-dev \
-		pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev \
-		xproto renderproto kbproto xextproto freetype freetype-dev fontconfig-dev \
-		bison flex gperf icu-dev libc-dev  libx11-dev libxext-dev  krb5-dev krb5-libs \
-		git build-base nodejs-dev perl ruby sqlite-dev \
-		keyutils-libs libcom_err musl-dev libgpg-error nss-dev libgcc zlib expat \
-		libssl1.0 libcrypto1.0 libgcrypt libgcrypt-dev libffi heimdal-libs paxctl \
-		libldap libtasn1 librtmp libsasl cyrus-sasl-dev libidn fontconfig p11-kit \
-		libcurl sqlite-libs gnutls gnutls-dev icu-libs \
-	&& mkdir -p /root \
-	&& node -v
+# 需要保留的系统组件，保留的越多，打包越大
+RUN apk add --no-cache bash make gcc g++ libstdc++ imagemagick graphicsmagick fontconfig \
+		python linux-headers libnsl libnsl-dev git zlib libcurl libjpeg-turbo-dev \
+		nodejs nodejs-npm yarn cairo cairomm cairo-dev cairomm-dev pixman jpeg-dev \
+		jpeg libjpeg libjpeg-turbo libpng libgcrypt pango-dev pangomm-dev libpng-dev \
+		pango pangomm giflib giflib-dev freetype krb5-libs krb5-dev
+
+# 需要删除的系统组件：.build-dependencies
+RUN apk add --no-cache --virtual=.build-dependencies \
+		binutils-gold gnupg imagemagick-dev sqlite-libs gnutls \
+		nodejs-dev pixman-dev openssl-dev gnutls-dev icu-libs \
+		xproto renderproto kbproto xextproto freetype-dev fontconfig-dev \
+		bison flex gperf icu-dev libc-dev  libx11-dev libxext-dev \
+		build-base perl ruby sqlite-dev graphicsmagick-dev \
+		keyutils-libs libcom_err musl-dev libgpg-error nss-dev libgcc expat \
+		libssl1.0 libcrypto1.0 libgcrypt-dev libffi heimdal-libs paxctl \
+		libldap libtasn1 librtmp libsasl cyrus-sasl-dev libidn p11-kit
 
 COPY fonts.tar.bz2 /tmp/fonts.tar.bz2
 COPY dockerized-phantomjs.tar.gz /tmp/phantomjs/dockerized-phantomjs.tar.gz
 COPY entrypoint.sh /sbin/entrypoint.sh
 
-RUN ln -s /usr/lib/libnsl.so /usr/lib/libnsl.so.1 \
+RUN rm /usr/lib/libclntsh.so /usr/lib/libocci.so /usr/lib/libociei.so /usr/lib/libnnz12.so \
+    && ln -s /usr/lib/instantclient_12_1/libclntsh.so.12.1 /usr/lib/libclntsh.so \
+    && ln -s /usr/lib/instantclient_12_1/libocci.so.12.1 /usr/lib/libocci.so \
+    && ln -s /usr/lib/instantclient_12_1/libociei.so /usr/lib/libociei.so \
+    && ln -s /usr/lib/instantclient_12_1/libnnz12.so /usr/lib/libnnz12.so \
+    && ln -s /usr/lib/libnsl.so /usr/lib/libnsl.so.1 \
     && mkdir -p /usr/share/fonts \
-	&& tar -xjvf /tmp/fonts.tar.bz2 -C /usr/share/fonts
+	&& tar -xjvf /tmp/fonts.tar.bz2 -C /usr/share/fonts \
+    && mkdir -p /root \
+	&& node -v
 
 RUN mkdir -p /tmp/phantomjs && cd /tmp/phantomjs && tar -xf dockerized-phantomjs.tar.gz && rm dockerized-phantomjs.tar.gz \
-        && chmod 755 /tmp/phantomjs/usr/local/bin/phantomjs \
-        && cp /tmp/phantomjs/usr/local/bin/phantomjs /usr/bin/phantomjs
+    && chmod 755 /tmp/phantomjs/usr/local/bin/phantomjs \
+    && cp /tmp/phantomjs/usr/local/bin/phantomjs /usr/bin/phantomjs
 
 RUN npm config set registry https://registry.npm.taobao.org --global
-RUN npm install --unsafe-perm -g node-gyp bower grunt-cli canvas@1.6.2 gulp-cli cordova-hot-code-push-cli pm2
+RUN npm install --phantomjs_cdnurl=http://npm.taobao.org/mirrors/phantomjs --unsafe-perm -g \
+    node-gyp \
+    bower \
+    grunt-cli \
+    canvas@1.6.2 \
+    gulp-cli \
+    cordova-hot-code-push-cli \
+    pm2 \
+    phantom@4.0.0 \
+    hiredis@0.4.1 \
+    kerberos@0.0.21
 
-RUN npm cache clear --force \
+RUN apk del .build-dependencies \
+    && npm cache clear --force \
     && chmod 755 /sbin/entrypoint.sh \
-    && rm -rf /tmp/* /var/cache/apk/* /root/.gnupg /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html \
-              node-v8.11.3.tar.xz /tmp/fonts.tar.bz2
+    && rm -rf /tmp/* \
+        /var/cache/apk/* \
+        /root/.gnupg \
+        /usr/lib/node_modules/npm/doc \
+        /usr/lib/node_modules/npm/html \
+        /node-v8.11.3.tar.xz \
+        /tmp/fonts.tar.bz2
 
 EXPOSE 80
 WORKDIR /wwwroot/htdocs/www
