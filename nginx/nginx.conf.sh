@@ -1,4 +1,4 @@
-sudo tee /etc/nginx/nginx.conf <<-EOF
+tee /etc/nginx/nginx.conf <<-EOF
 user nginx;
 
 worker_processes 8;
@@ -15,10 +15,6 @@ http {
 
 	include /etc/nginx/mime.types;
 	default_type application/octet-stream;
-	
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-      '$status $body_bytes_sent "$http_referer" '
-      '"$http_user_agent" "$http_x_forwarded_for"';
 
 	##
 	# Logging Settings
@@ -26,7 +22,6 @@ http {
 
 	access_log /var/log/nginx/access.log;
 	error_log /var/log/nginx/error.log;
-
 
 	##
 	# Basic Settings

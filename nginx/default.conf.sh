@@ -1,4 +1,4 @@
-sudo tee /etc/nginx/conf.d/default.conf <<-EOF
+tee /etc/nginx/conf.d/default.conf <<-EOF
 upstream admin {
     server ${ADMIN_URL};
 }
@@ -24,14 +24,14 @@ server {
         # proxy_cache_valid any 10s;
         # proxy_cache_valid 200 304 7d;
         # proxy_cache_valid 301 3d;
-        # proxy_cache_key $host$uri$is_args$args;
+        # proxy_cache_key \$host\$uri\$is_args\$args;
         proxy_redirect off;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Host \$host;
 
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection "upgrade";
 
         #sendfile       on;
@@ -43,12 +43,12 @@ server {
 
     location /joincas {
         proxy_redirect off;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Host \$host;
 
         # proxy_http_version 1.1;
-        # proxy_set_header Upgrade $http_upgrade;
+        # proxy_set_header Upgrade \$http_upgrade;
         # proxy_set_header Connection "upgrade";
 
         #sendfile       on;
@@ -74,14 +74,14 @@ server {
         # proxy_cache_valid any 10s;
         # proxy_cache_valid 200 304 7d;
         # proxy_cache_valid 301 3d;
-        # proxy_cache_key $host$uri$is_args$args;
+        # proxy_cache_key \$host\$uri\$is_args\$args;
         proxy_redirect off;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Host \$host;
 
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection "upgrade";
 
         #sendfile       on;
