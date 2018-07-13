@@ -11,5 +11,7 @@ COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh && \
     chmod 755 /etc/nginx/conf.d/default.conf.sh && \
     chmod 755 /etc/nginx/nginx.conf.sh
+    
+ENTRYPOINT ["/sbin/entrypoint.sh"]
 
-CMD ["/sbin/entrypoint.sh;", "nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
