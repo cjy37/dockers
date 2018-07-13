@@ -12,4 +12,4 @@ RUN chmod 755 /sbin/entrypoint.sh && \
     chmod 755 /etc/nginx/conf.d/default.conf.sh && \
     chmod 755 /etc/nginx/nginx.conf.sh
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/sbin/entrypoint.sh;", "nginx", "-g", "daemon off;"]
