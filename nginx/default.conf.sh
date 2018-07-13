@@ -1,3 +1,5 @@
+#!/bin/sh
+
 tee /etc/nginx/conf.d/default.conf <<-EOF
 upstream admin {
     server ${ADMIN_URL};

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 tee /etc/nginx/nginx.conf <<-EOF
 user nginx;
 
