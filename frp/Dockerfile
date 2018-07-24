@@ -1,10 +1,11 @@
-FROM ubuntu
+FROM alpine:3.7
 MAINTAINER rocky <75264521@qq.com>
 
 ARG FRP_VERSION=0.20.0
 
-RUN apt update \
-    && apt install -y wget
+RUN apk update \
+	&& apk upgrade \
+	&& apk add --no-cache --virtual .build-dependencies wget
 
 WORKDIR /tmp
 RUN set -x \
@@ -12,9 +13,8 @@ RUN set -x \
     && tar -zxf frp_${FRP_VERSION}_linux_amd64.tar.gz \
     && mv frp_${FRP_VERSION}_linux_amd64 /var/frp \
     && mkdir -p /var/frp/conf \
-    && apt remove -y wget \
-    && apt autoremove -y \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /tmp/* /var/cache/apk/* \
+    && apk del .build-dependencies
 
 COPY conf/frps.ini /var/frp/conf/frps.ini
 
