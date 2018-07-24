@@ -12,6 +12,6 @@ RUN apt-get update && \
 
 COPY proxysql.conf /etc/proxysql/proxysql.conf
 
-EXPOSE 7000 7500 80 443
+EXPOSE 6032 3306
 
 ENTRYPOINT ["proxysql", "-f", "-c", "/etc/proxysql/proxysql.conf"]

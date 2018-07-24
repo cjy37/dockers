@@ -12,7 +12,11 @@ RUN set -x \
 
 COPY conf/frps.ini /var/frp/conf/frps.ini
 
-VOLUME /var/frp/conf    # conf被配置成了卷，方便以后修改frps.ini
+# conf被配置成了卷，方便以后修改frps.ini
+VOLUME /var/frp/conf    
 
 WORKDIR /var/frp
+
+EXPOSE 7000 7500 80 443
+
 ENTRYPOINT ./frps -c ./conf/frps.ini
