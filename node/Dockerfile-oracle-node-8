@@ -17,7 +17,7 @@ RUN apk update \
 
 # 需要保留的系统组件，保留的越多，打包越大
 RUN apk add --no-cache bash make gcc g++ libstdc++ imagemagick graphicsmagick fontconfig \
-		python linux-headers libnsl libnsl-dev git zlib libcurl libjpeg-turbo-dev \
+		python linux-headers libnsl libnsl-dev git zlib zlib-dev libcurl libjpeg-turbo-dev \
 		nodejs nodejs-npm yarn cairo cairomm cairo-dev cairomm-dev pixman jpeg-dev \
 		jpeg libjpeg libjpeg-turbo libpng libgcrypt pango-dev pangomm-dev libpng-dev \
 		pango pangomm giflib giflib-dev freetype krb5-libs krb5-dev
