@@ -34,7 +34,6 @@ RUN apk add --no-cache --virtual=.build-dependencies \
 		libldap libtasn1 librtmp libsasl cyrus-sasl-dev libidn p11-kit
 
 COPY fonts.tar.bz2 /tmp/fonts.tar.bz2
-COPY dockerized-phantomjs.tar.gz /tmp/phantomjs/dockerized-phantomjs.tar.gz
 COPY entrypoint.sh /sbin/entrypoint.sh
 
 RUN rm /usr/lib/libclntsh.so /usr/lib/libocci.so /usr/lib/libociei.so /usr/lib/libnnz12.so \
@@ -47,11 +46,18 @@ RUN rm /usr/lib/libclntsh.so /usr/lib/libocci.so /usr/lib/libociei.so /usr/lib/l
 	&& tar -xjvf /tmp/fonts.tar.bz2 -C /usr/share/fonts \
     && mkdir -p /root \
 	&& node -v
+    
+#COPY dockerized-phantomjs.tar.gz /tmp/phantomjs/dockerized-phantomjs.tar.gz
+#RUN mkdir -p /tmp/phantomjs && cd /tmp/phantomjs && tar -xf dockerized-phantomjs.tar.gz && rm dockerized-phantomjs.tar.gz \
+#    && chmod 755 /tmp/phantomjs/usr/local/bin/phantomjs \
+#    && cp /tmp/phantomjs/usr/local/bin/phantomjs /usr/bin/phantomjs
 
-RUN mkdir -p /tmp/phantomjs && cd /tmp/phantomjs && tar -xf dockerized-phantomjs.tar.gz && rm dockerized-phantomjs.tar.gz \
-    && chmod 755 /tmp/phantomjs/usr/local/bin/phantomjs \
-    && cp /tmp/phantomjs/usr/local/bin/phantomjs /usr/bin/phantomjs
-
+RUN mkdir -p /usr/share \
+  && cd /usr/share \
+  && curl -L https://github.com/Overbryd/docker-phantomjs-alpine/releases/download/2.11/phantomjs-alpine-x86_64.tar.bz2 | tar xj \
+  && ln -s /usr/share/phantomjs/phantomjs /usr/bin/phantomjs \
+  && phantomjs --version
+  
 RUN npm config set registry https://registry.npm.taobao.org --global
 RUN npm install --phantomjs_cdnurl=http://npm.taobao.org/mirrors/phantomjs --unsafe-perm -g \
     node-gyp \
