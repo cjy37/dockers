@@ -47,16 +47,16 @@ RUN rm /usr/lib/libclntsh.so /usr/lib/libocci.so /usr/lib/libociei.so /usr/lib/l
     && mkdir -p /root \
 	&& node -v
     
-COPY dockerized-phantomjs.tar.gz /tmp/phantomjs/dockerized-phantomjs.tar.gz
-RUN mkdir -p /tmp/phantomjs && cd /tmp/phantomjs && tar -xf dockerized-phantomjs.tar.gz && rm dockerized-phantomjs.tar.gz \
-    && chmod 755 /tmp/phantomjs/usr/local/bin/phantomjs \
-    && cp /tmp/phantomjs/usr/local/bin/phantomjs /usr/bin/phantomjs
+#COPY dockerized-phantomjs.tar.gz /tmp/phantomjs/dockerized-phantomjs.tar.gz
+#RUN mkdir -p /tmp/phantomjs && cd /tmp/phantomjs && tar -xf dockerized-phantomjs.tar.gz && rm dockerized-phantomjs.tar.gz \
+#    && chmod 755 /tmp/phantomjs/usr/local/bin/phantomjs \
+#    && cp /tmp/phantomjs/usr/local/bin/phantomjs /usr/bin/phantomjs
 
-#RUN mkdir -p /usr/share \
-#  && cd /usr/share \
-#  && curl -L https://github.com/Overbryd/docker-phantomjs-alpine/releases/download/2.11/phantomjs-alpine-x86_64.tar.bz2 | tar xj \
-#  && ln -s /usr/share/phantomjs/phantomjs /usr/bin/phantomjs \
-#  && phantomjs --version
+RUN mkdir -p /usr/share \
+  && cd /usr/share \
+  && curl -L https://github.com/Overbryd/docker-phantomjs-alpine/releases/download/2.11/phantomjs-alpine-x86_64.tar.bz2 | tar xj \
+  && ln -s /usr/share/phantomjs/phantomjs /usr/bin/phantomjs \
+  && phantomjs --version
   
 RUN npm config set registry https://registry.npm.taobao.org --global
 RUN npm install --phantomjs_cdnurl=http://npm.taobao.org/mirrors/phantomjs --unsafe-perm -g \
