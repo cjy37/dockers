@@ -5,8 +5,8 @@ ENV VERSION=v8.11.3 NPM_VERSION=5 YARN_VERSION=latest
 # ENV VERSION=v10.4.1 NPM_VERSION=6 YARN_VERSION=latest
 
 # 修改为国内镜像源
-#RUN echo 'https://mirrors.ustc.edu.cn/alpine/v3.7/main' > /etc/apk/repositories \
-# && echo 'https://mirrors.ustc.edu.cn/alpine/v3.7/community' >> /etc/apk/repositories
+RUN echo 'https://mirrors.ustc.edu.cn/alpine/v3.7/main' > /etc/apk/repositories \
+ && echo 'https://mirrors.ustc.edu.cn/alpine/v3.7/community' >> /etc/apk/repositories
 
 # 修改了镜像源，需要更新证书
 RUN apk update \
