@@ -61,8 +61,7 @@ RUN mkdir -p /usr/share \
   && ln -s /usr/share/phantomjs/phantomjs /usr/bin/phantomjs \
   && phantomjs --version
   
-RUN npm config set registry https://registry.npm.taobao.org --global
-RUN npm install --phantomjs_cdnurl=http://npm.taobao.org/mirrors/phantomjs --unsafe-perm -g \
+RUN npm install --unsafe-perm -g \
     node-gyp \
     bower \
     grunt-cli \
@@ -72,7 +71,8 @@ RUN npm install --phantomjs_cdnurl=http://npm.taobao.org/mirrors/phantomjs --uns
     pm2 \
     phantom@4.0.0 \
     hiredis@0.4.1 \
-    kerberos@0.0.21
+    kerberos@0.0.21 \
+    && npm config set registry https://registry.npm.taobao.org --global
 
 RUN apk del .build-dependencies \
     && npm cache clear --force \
