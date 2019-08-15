@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:8
+FROM mhart/alpine-node:10
 
 COPY entrypoint.sh /sbin/entrypoint.sh
 COPY fonts.tar.bz2 /tmp/fonts.tar.bz2
@@ -53,7 +53,7 @@ RUN apk add --no-cache \
 	&& node -v
 
 RUN mkdir /tmp/phantomjs && cd /tmp/phantomjs \
-	&& curl -Ls https://github.com/fgrehm/docker-phantomjs2/releases/download/v2.0.0-20150722/dockerized-phantomjs.tar.gz | tar xz \
+	&& curl -Ls https://github.com/dustinblackman/phantomized/releases/download/2.1.1/dockerized-phantomjs.tar.gz | tar xz \
 	&& chmod 755 /tmp/phantomjs/usr/local/bin/phantomjs \
 	&& cp /tmp/phantomjs/usr/local/bin/phantomjs /usr/bin/phantomjs
 	
