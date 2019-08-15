@@ -25,21 +25,14 @@ RUN apk update \
 	&& apk add --update ca-certificates openssl \
 	&& update-ca-certificates \
   && \
-apk add --no-cache bash make gcc g++ libstdc++ imagemagick graphicsmagick fontconfig \
-		python linux-headers libnsl libnsl-dev git zlib zlib-dev libcurl libjpeg-turbo-dev \
-		nodejs nodejs-npm yarn cairo cairomm cairo-dev cairomm-dev pixman jpeg-dev \
-		jpeg libjpeg libjpeg-turbo libpng libgcrypt pango-dev pangomm-dev libpng-dev \
-		pango pangomm giflib giflib-dev freetype krb5-libs krb5-dev \
-    && \
-apk add --no-cache --virtual=.build-dependencies \
-		binutils-gold gnupg imagemagick-dev sqlite-libs gnutls \
-		nodejs-dev pixman-dev openssl-dev gnutls-dev icu-libs \
-		xproto renderproto kbproto xextproto freetype-dev fontconfig-dev \
-		bison flex gperf icu-dev libc-dev  libx11-dev libxext-dev \
-		build-base perl ruby sqlite-dev graphicsmagick-dev \
-		keyutils-libs libcom_err musl-dev libgpg-error nss-dev libgcc expat \
-		libgcrypt-dev libffi heimdal-libs paxctl \
-		libldap libtasn1 librtmp libsasl cyrus-sasl-dev libidn p11-kit \
+apk add --no-cache zlib zlib-dev libcurl nodejs nodejs-npm yarn \
+	   bash curl g++ cairo cairo-dev cairomm cairomm-dev pixman pixman-dev binutils-gold \
+	   jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng gnupg krb5-dev krb5-libs \
+	   imagemagick-dev graphicsmagick-dev imagemagick graphicsmagick fontconfig libgcc \
+	   pango pango-dev pangomm pangomm-dev giflib giflib-dev openssl-dev libstdc++ libgcrypt \
+	   xproto renderproto kbproto xextproto freetype freetype-dev fontconfig-dev libgcrypt-dev \
+	   bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
+	   git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make \
     && \
 apk add fontconfig mkfontscale wqy-zenhei \
     --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing --allow-untrusted \
