@@ -59,8 +59,7 @@ npm install --production --unsafe-perm -g \
     kerberos@0.0.21 \
     && npm config set registry https://registry.npm.taobao.org --global \
     && \
-apk del .build-dependencies \
-    && npm cache clear --force \
+npm cache clear --force \
     && chmod 755 /sbin/entrypoint.sh \
     && rm -rf /tmp/* \
         /var/cache/apk/* \
