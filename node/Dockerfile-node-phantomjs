@@ -38,7 +38,7 @@ apk add --no-cache --virtual=.build-dependencies \
 		bison flex gperf icu-dev libc-dev  libx11-dev libxext-dev \
 		build-base perl ruby sqlite-dev graphicsmagick-dev \
 		keyutils-libs libcom_err musl-dev libgpg-error nss-dev libgcc expat \
-		libssl1.0 libcrypto1.0 libgcrypt-dev libffi heimdal-libs paxctl \
+		libgcrypt-dev libffi heimdal-libs paxctl \
 		libldap libtasn1 librtmp libsasl cyrus-sasl-dev libidn p11-kit \
     && \
 apk add fontconfig mkfontscale wqy-zenhei \
