@@ -16,7 +16,7 @@ ADD entrypoint.sh /sbin/entrypoint.sh
 
 EXPOSE 80
 WORKDIR /wwwroot/htdocs/www
-ENTRYPOINT ["/sbin/entrypoint.sh"]
+CMD ["/sbin/entrypoint.sh"]
 
 # 修改了镜像源，需要更新证书
 RUN apk update \
