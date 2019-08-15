@@ -64,7 +64,7 @@ npm install --production --unsafe-perm -g \
     phantom@4.0.0 \
     hiredis@0.4.1 \
     kerberos@0.0.21 \
-    && npm config set registry https://registry.npm.taobao.org --global
+    && npm config set registry https://registry.npm.taobao.org --global &&
     && \
 apk del .build-dependencies \
     && npm cache clear --force \
