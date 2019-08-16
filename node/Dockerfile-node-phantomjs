@@ -1,22 +1,18 @@
-FROM alpine:3.10
+FROM node:alpine-8
 
-ENV LANG=en_US.UTF-8
-ENV VERSION=v10.16.2 NPM_VERSION=6.9.0 YARN_VERSION=latest
-# ENV VERSION=v10.4.1 NPM_VERSION=6 YARN_VERSION=latest
+LABEL maintainer="ROCKY CHEN<rocky.cn@foxmail.com>"
 
 # 修改为国内镜像源
 #RUN echo 'https://mirrors.ustc.edu.cn/alpine/v3.7/main' > /etc/apk/repositories \
 # && echo 'https://mirrors.ustc.edu.cn/alpine/v3.7/community' >> /etc/apk/repositories
-
-RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.10/main' > /etc/apk/repositories \
- && echo 'http://dl-cdn.alpinelinux.org/alpine/v3.10/community' >> /etc/apk/repositories
-
-ADD fonts.tar.bz2 /usr/share/fonts
-ADD entrypoint.sh /sbin/entrypoint.sh
+RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.9/main' > /etc/apk/repositories \
+ && echo 'http://dl-cdn.alpinelinux.org/alpine/v3.9/community' >> /etc/apk/repositories
 
 EXPOSE 80
 WORKDIR /wwwroot/htdocs/www
-CMD ["/sbin/entrypoint.sh"]
+
+ADD entrypoint.sh /sbin/entrypoint.sh
+ADD fonts.tar.bz2 /usr/share/fonts
 
 # 修改了镜像源，需要更新证书
 RUN apk update \
@@ -25,7 +21,7 @@ RUN apk update \
 	&& apk add --update ca-certificates openssl \
 	&& update-ca-certificates \
   && \
-apk add --no-cache zlib zlib-dev libcurl nodejs nodejs-npm yarn \
+apk add --no-cache zlib zlib-dev libcurl \
 	   bash curl g++ cairo cairo-dev cairomm cairomm-dev pixman pixman-dev binutils-gold \
 	   jpeg jpeg-dev libjpeg libjpeg-turbo libjpeg-turbo-dev libpng gnupg krb5-dev krb5-libs \
 	   imagemagick-dev graphicsmagick-dev imagemagick graphicsmagick fontconfig libgcc \
