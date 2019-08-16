@@ -30,9 +30,6 @@ apk add --no-cache zlib zlib-dev libcurl \
 	   bison flex gperf icu-dev libc-dev libpng-dev libx11-dev libxext-dev paxctl \
 	   git build-base nodejs-dev gcc perl python ruby sqlite-dev linux-headers make \
     && \
-apk add fontconfig mkfontscale wqy-zenhei \
-    --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing --allow-untrusted \
-    && \
 mkdir -p /root \
   && node -v \
   && \
